@@ -110,20 +110,6 @@ export async function validateConfig(config: PiGenConfig): Promise<void> {
     throw new Error('compression-level must be between 0 and 9 (or 9e for xz)')
   }
 
-  const cutCmd = await io.which('cut', true)
-  const supportedLocales = (
-    await exec.getExecOutput(
-      cutCmd,
-      ['-d', ' ', '-f1', '/usr/share/i18n/SUPPORTED'],
-      {silent: true}
-    )
-  ).stdout.split('\n')
-  if (!supportedLocales.includes(config.localeDefault)) {
-    throw new Error(
-      'locale is not included in the list of supported locales (retrieved from /usr/share/i18n/SUPPORTED)'
-    )
-  }
-
   if (!config.targetHostname) {
     throw new Error('hostname must not be empty')
   }
